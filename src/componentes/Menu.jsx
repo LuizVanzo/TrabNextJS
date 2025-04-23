@@ -30,9 +30,12 @@ function Menu() {
                 <Navbar.Collapse className="justify-content-end">
                     <NavDropdown title={session == null ? 'Login' : 'Autenticado como: ' + session.user.name} id="basic-nav-dropdown">
                         {session == null &&
-                            <form action={signIn}>
-                                <button type="submit" className="dropdown-item">Login</button>
-                            </form>
+                            <>
+                                <form action={signIn}>
+                                    <button type="submit" className="dropdown-item">Login</button>
+                                </form>
+                                <Link className="dropdown-item" href={`/register`}>Criar Usuário</Link>
+                            </>
                         }
                         {session != null &&
                             <>

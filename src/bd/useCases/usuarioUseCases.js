@@ -97,9 +97,47 @@ async function updateUsuarioDB({ id, senha }) {
     }
 }
 
+async function createUsuarioDB(dados) {
+    try {
+        const { nome, email, senha, tipo, telefone } = dados;
+
+        const existe = await pool.query(`SELECT 1 FROM usuarios WHERE email = $1`, [email]);
+        if (existe.rowCount > 0) {
+            throw "Email já cadastrado";
+        }
+
+        // Busca o maior ID atual e incrementa manualmente
+        const resultadoId = await pool.query(`SELECT COALESCE(MAX(id), 0) + 1 AS proximoId FROM usuarios`);
+        const proximoId = resultadoId.rows[0].proximoid;
+
+        const result = await pool.query(
+            `INSERT INTO usuarios (id, nome, email, senha, tipo, telefone)
+             VALUES ($1, $2, $3, $4, $5, $6)
+             RETURNING id, nome, email, tipo, telefone, senha, randomKey`,
+            [proximoId, nome, email, senha, tipo, telefone]
+        );
+
+        const usuario = result.rows[0];
+        return new Usuario(
+            usuario.id,
+            usuario.nome,
+            usuario.email,
+            usuario.tipo,
+            usuario.telefone,
+            usuario.senha,
+            usuario.randomkey
+        );
+    } catch (err) {
+        console.error("Erro ao criar usuário:", err);
+        throw "Erro ao criar usuário: " + err;
+    }
+}
+
+
 module.exports = {
     Usuario,
     autenticaUsuarioDB,
     getUsuarioPorIdDB,
     updateUsuarioDB,
+    createUsuarioDB,
 };
