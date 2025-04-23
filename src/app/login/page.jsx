@@ -70,3 +70,12 @@ export default function Login() {
     </Suspense>
   );
 }
+
+// Main Login Component with Suspense Boundary
+export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
+  );
+}
