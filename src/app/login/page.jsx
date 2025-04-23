@@ -1,21 +1,23 @@
-'use client'
+'use client';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { signIn } from "next-auth/react";
+import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function Login() {
+// Separate Client Component that uses useSearchParams
+function LoginContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
   const handleLogin = async (formData) => {
     console.log('formData: ' + JSON.stringify(formData));
-    await signIn("credentials", {
+    await signIn('credentials', {
       email: formData.get('email'),
       senha: formData.get('senha'),
-      callbackUrl: '/'
+      callbackUrl: '/',
     });
-  }
+  };
 
   return (
     <div className="container">
@@ -29,14 +31,24 @@ export default function Login() {
           </h4>
         )}
         <div className="col-12 col-md-6">
-          <Form action={handleLogin} method='POST'>
+          <Form action={handleLogin} method="POST">
             <Form.Group className="mb-3" controlId="txtEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Informe o email" name="email" required />
+              <Form.Control
+                type="email"
+                placeholder="Informe o email"
+                name="email"
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="txtSenha">
               <Form.Label>Senha</Form.Label>
-              <Form.Control type="password" placeholder="Senha" name="senha" required />
+              <Form.Control
+                type="password"
+                placeholder="Senha"
+                name="senha"
+                required
+              />
             </Form.Group>
             <div className="form-group text-center mt-3">
               <Button variant="primary" type="submit">
@@ -47,5 +59,14 @@ export default function Login() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+// Main Login Component with Suspense Boundary
+export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
+  );
 }
