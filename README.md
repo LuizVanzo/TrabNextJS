@@ -1,7 +1,7 @@
 # TrabNextJS
 1. Clone este repositório:
    ```sh
-   git clone https://github.com/LuizVanzo/goAPI.git
+   git clone https://github.com/LuizVanzo/TrabNextJS.git
    ```
 
 2. Baixar as dependências :
