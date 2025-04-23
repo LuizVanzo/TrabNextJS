@@ -6,7 +6,7 @@
 
 2. Baixar as dependências :
    ```sh
-   nmp i
+   npm i
    ```
 3. Rodar o projeto :
    ```sh
